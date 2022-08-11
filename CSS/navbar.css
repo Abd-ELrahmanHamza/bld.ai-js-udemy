@@ -1,0 +1,173 @@
+/*
+  Contains navbar styling
+*/
+
+header {
+  box-shadow: 0 2px 4px rgb(28 76 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%);
+  height: 4.5rem;
+  display: flex;
+  align-items: center;
+  font-weight: lighter;
+  font-size: 13px;
+  min-width: 610px;
+  position: sticky;
+  width: 100%;
+}
+
+nav {
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
+nav {
+  flex-shrink: 0;
+}
+nav ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+.nav-list-btns {
+  margin-right: -5px;
+}
+
+.header-container {
+  width: 97%;
+  height: 62%;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.search-container {
+  flex-grow: 1;
+  text-align: center;
+  background-color: #f7f9fa;
+  border: 1px solid #1c1d1f;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.search-form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.search-input {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  flex-grow: 1;
+}
+
+.search-icon {
+  width: 3em;
+  text-align: center;
+}
+
+.submit-search {
+  color: white;
+  background-color: #1c1d1f;
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.login {
+  color: #1c1d1f;
+  background-color: transparent;
+}
+
+.signup {
+  color: white;
+  background-color: #1c1d1f;
+}
+
+.earth {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  height: 20px;
+}
+
+.cart-link {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-color: transparent;
+  margin-right: -10px;
+}
+
+.search-small {
+  display: none;
+}
+
+.categories {
+  padding: 0 1.2rem;
+}
+
+.btn.earth:hover,
+.btn.login:hover {
+  background-color: beige;
+}
+
+.nav-list-links:hover,
+.categories:hover,
+.search-small:hover,
+.cart-link:hover {
+  color: #5624d0;
+  cursor: pointer;
+}
+
+/* Media queries */
+
+@media only screen and (max-width: 1080px) {
+  .business-nav {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 920px) {
+  .nav-links {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .nav-btns {
+    display: none;
+  }
+
+  .search-container {
+    display: none;
+  }
+
+  .categories {
+    display: none;
+  }
+
+  .cart-link:hover,
+  .search-small:hover {
+    color: black;
+  }
+
+  .search-small {
+    color: black;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    border-color: transparent;
+    margin-right: -10px;
+  }
+
+  .logo {
+    text-align: center;
+    flex-grow: 1;
+  }
+}

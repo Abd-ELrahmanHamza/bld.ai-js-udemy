@@ -1,0 +1,113 @@
+/*
+  Contains courses section styling
+*/
+.career-title {
+  margin: 0;
+}
+
+.courses-paragraph {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  margin-bottom: 1.6rem;
+  max-width: 50rem;
+}
+
+.courses-section {
+  border: 1px solid #d1d7dc;
+  padding: 1.5rem;
+}
+
+.courses-list {
+  display: flex;
+  overflow: hidden;
+  width: auto;
+}
+
+.course-item {
+  margin-right: 20px;
+  font-weight: bold;
+  color: #6a6f73;
+}
+
+.active {
+  color: black;
+}
+
+.course {
+  width: 240px;
+  margin: 2rem 0;
+}
+
+.course-title {
+  margin: 0.5rem 0;
+}
+
+.course-instructor {
+  color: #6a6f73;
+  margin: 0;
+  font-size: 13px;
+}
+
+.course-students {
+  color: #6a6f73;
+  margin: 0;
+  font-size: 13px;
+  display: inline;
+  font-weight: lighter;
+}
+
+.stars {
+  margin: 0.5rem 0 0.5rem 0;
+  color: #e59819;
+  font-weight: bold;
+}
+
+.courses {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.course-discount {
+  color: #6a6f73;
+  margin: 0;
+  font-size: 13px;
+  display: inline;
+  font-weight: lighter;
+  text-decoration: line-through;
+  font-style: italic;
+}
+
+.course-price {
+  margin: 0.5rem 0;
+  display: inline-block;
+}
+.course-rate {
+  color: #b4695b;
+  font-style: normal;
+}
+
+.best-seller {
+  background-color: #eceb98;
+  color: #3d3c0a;
+}
+
+.best-seller {
+  display: block;
+  width: fit-content;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 6px;
+}
+.course-item:hover {
+  color: black;
+  cursor: pointer;
+}
+
+.explore:hover {
+  background-color: beige;
+}
