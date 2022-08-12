@@ -1,5 +1,5 @@
 /*
-Description: 
+Description:
     A function that fetches the courses from JSON Server
 Input: None
 Output: Fetched courses Type: promise
@@ -53,7 +53,6 @@ const showCourses = (courses, filterString) => {
       coursesDiv += courseHTMLStr;
     }
   });
-
   return coursesDiv;
 };
 
@@ -78,11 +77,14 @@ Description:
 Input   : None
 Output  : None
 */
-const filterCourses = () => {
+
+document.querySelector("#submit-search").addEventListener("click", (event) => {
+  event.preventDefault();
+  console.log("clicked");
   const filterString = document.querySelector("#search-input");
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(
     courses,
     filterString.value.toUpperCase()
   );
-};
+});
