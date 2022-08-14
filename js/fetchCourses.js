@@ -1,10 +1,14 @@
 /**
  * This function fetches all courses from JSON server
  *
+ * @param {String} courseName - The courses with this topic name
  * @returns {Promise} - A promise that contains all fetched courses from JSON Server
  */
-const fetchCourses = async () => {
-  const response = await fetch("http://localhost:8000/courses");
+const fetchCourses = async (courseName) => {
+  console.log(courseName.replace(" ", ""));
+  const response = await fetch(
+    `http://localhost:8000/${courseName.replace(" ", "")}`
+  );
   const courses = await response.json();
   return courses;
 };
@@ -40,7 +44,9 @@ const buildCourse = (course) => {
               </a>
               <p class="course-instructor">${course.author}</p>
               <div class="stars">
-                  <i class="course-rate">${course.rating}</i>
+                  <i class="course-rate">${
+                    Math.round(course.rating * 10) / 10
+                  }</i>
                   <i class="fa fa-star checked"></i>
                   <i class="fa fa-star checked"></i>
                   <i class="fa fa-star checked"></i>
@@ -101,7 +107,8 @@ let courses;
  * Fetch and show courses on load
  */
 window.onload = async () => {
-  courses = await fetchCourses();
+  const courseName = document.querySelector(".course-item.active").textContent;
+  courses = await fetchCourses(courseName);
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(courses, "");
 };
@@ -118,3 +125,23 @@ document.querySelector("#submit-search").addEventListener("click", (event) => {
     filterString.value.toUpperCase()
   );
 });
+
+// Add an event listener to each one of courses list
+const coursesNames = document.querySelectorAll(".course-item");
+for (let i = 0; i < coursesNames.length; i++) {
+  coursesNames[i].addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    // Get topic name to fetch it's courses from database
+    const newCourseName = coursesNames[i].textContent;
+    courses = await fetchCourses(newCourseName);
+    const courseSection = document.querySelector("#courses");
+    courseSection.innerHTML = showCourses(courses, "");
+
+    // Add active class to selected topic and remove it from other topics
+    coursesNames[i].classList.add("active");
+    for (let j = 0; j < coursesNames.length; j++) {
+      if (j !== i) coursesNames[j].classList.remove("active");
+    }
+  });
+}
