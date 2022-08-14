@@ -11,45 +11,81 @@ const fetchCourses = async () => {
 
 /**
  *
+ * @param {Array} data - Array contains all courses
+ * @param {Integer} n - The size of group
+ * @returns {2D Array} - Array contains a group of courses represented by arrays
+ */
+function groupCourses(data, n) {
+  var group = [];
+  for (var i = 0, j = 0; i < data.length; i++) {
+    if (i >= n && i % n === 0) j++;
+    group[j] = group[j] || [];
+    group[j].push(data[i]);
+  }
+  return group;
+}
+
+/**
+ * A function that builds the HTML string of the course
+ *
+ * @param {Object} course - An Object that contains a single course information
+ * @returns {String} - A string of HTML representation of a course
+ */
+const buildCourse = (course) => {
+  const courseHTMLStr = `
+          <div class="course">
+              <img src="${course.image}" alt="${course.alt}" height="135">
+              <a href="${course.image}">
+                  <h4 class="course-title">${course.title}</h3>
+              </a>
+              <p class="course-instructor">${course.author}</p>
+              <div class="stars">
+                  <i class="course-rate">${course.rating}</i>
+                  <i class="fa fa-star checked"></i>
+                  <i class="fa fa-star checked"></i>
+                  <i class="fa fa-star checked"></i>
+                  <i class="fa fa-star checked"></i>
+                  <i class="fa-solid fa-star-half-stroke"></i>
+                  <p class="course-students">(${course.people})</p>
+              </div>
+              <h4 class="course-price">E&#163;${course.price}</h4>
+              <p class="course-discount">E&#163;${course.discount}</p>
+              ${
+                course.bestseller === "true"
+                  ? '<span class="best-seller">Bestseller</span>'
+                  : ""
+              }
+          </div>
+        `;
+  return courseHTMLStr;
+};
+
+/**
+ *
  * @param {Array} courses - An array of courses Objects
  * @param {String} filterString - A string to filter the courses according their title (if empty then fetch all courses)
  * @returns {String} - A string that contains tha HTML for all courses
  */
 const showCourses = (courses, filterString) => {
   let coursesDiv = "";
-  courses.forEach((course) => {
-    if (
-      filterString === "" ||
-      course.title.toUpperCase().indexOf(filterString) > -1
-    ) {
-      const courseHTMLStr = `
-        <div class="course">
-            <img src="${course.image}" alt="${course.alt}" height="135">
-            <a href="${course.image}">
-                <h4 class="course-title">${course.title}</h3>
-            </a>
-            <p class="course-instructor">${course.author}</p>
-            <div class="stars">
-                <i class="course-rate">${course.rating}</i>
-                <i class="fa fa-star checked"></i>
-                <i class="fa fa-star checked"></i>
-                <i class="fa fa-star checked"></i>
-                <i class="fa fa-star checked"></i>
-                <i class="fa-solid fa-star-half-stroke"></i>
-                <p class="course-students">(${course.people})</p>
-            </div>
-            <h4 class="course-price">E&#163;${course.price}</h4>
-            <p class="course-discount">E&#163;${course.discount}</p>
-            ${
-              course.bestseller === "true"
-                ? '<span class="best-seller">Bestseller</span>'
-                : ""
-            }
-        </div>
-        `;
-      coursesDiv += courseHTMLStr;
-    }
-  });
+  const coursesGroups = groupCourses(courses, 5);
+  console.log(coursesGroups);
+  for (let i = 0; i < coursesGroups.length; i++) {
+    coursesDiv += `<div class="carousel-item ${i === 0 ? "active" : ""}">`;
+    coursesDiv += `<div class="courses" id="courses">`;
+    coursesGroups[i].forEach((course) => {
+      if (
+        filterString === "" ||
+        course.title.toUpperCase().indexOf(filterString) > -1
+      ) {
+        coursesDiv += buildCourse(course);
+      }
+    });
+    coursesDiv += `</div>`;
+    coursesDiv += `</div>`;
+  }
+  console.log(coursesDiv);
+
   return coursesDiv;
 };
 
