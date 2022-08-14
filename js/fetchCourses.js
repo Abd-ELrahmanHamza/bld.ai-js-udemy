@@ -28,7 +28,7 @@ const showCourses = (courses, filterString) => {
             <a href="${course.image}">
                 <h4 class="course-title">${course.title}</h3>
             </a>
-            <p class="course-instructor">>${course.author}</p>
+            <p class="course-instructor">${course.author}</p>
             <div class="stars">
                 <i class="course-rate">${course.rating}</i>
                 <i class="fa fa-star checked"></i>

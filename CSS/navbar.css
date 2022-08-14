@@ -18,11 +18,11 @@ nav {
   padding: 0 10px;
   display: flex;
   justify-content: space-around;
+  align-items: center;
+  flex-shrink: 0;
+  margin: auto;
 }
 
-nav {
-  flex-shrink: 0;
-}
 nav ul {
   display: flex;
   justify-content: space-around;
@@ -79,6 +79,21 @@ nav ul li {
   border-radius: 9999px;
 }
 
+.login,
+.signup,
+.earth {
+  box-sizing: content-box;
+}
+
+.login:hover,
+.earth:hover {
+  color: #1c1d1f;
+}
+
+.signup:hover {
+  color: white;
+}
+
 .login {
   color: #1c1d1f;
   background-color: transparent;
@@ -115,6 +130,10 @@ nav ul li {
 .btn.earth:hover,
 .btn.login:hover {
   background-color: beige;
+}
+
+.nav-links-ul {
+  margin: auto;
 }
 
 .nav-list-links:hover,
