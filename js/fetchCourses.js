@@ -1,23 +1,20 @@
-/*
-Description:
-    A function that fetches the courses from JSON Server
-Input: None
-Output: Fetched courses Type: promise
-*/
+/**
+ * This function fetches all courses from JSON server
+ *
+ * @returns {Promise} - A promise that contains all fetched courses from JSON Server
+ */
 const fetchCourses = async () => {
   const response = await fetch("http://localhost:8000/courses");
   const courses = await response.json();
   return courses;
 };
 
-/*
-Description:
-    A function shows the fetched courses
-Input:
-    1- Courses type  : Array of Objects
-    2- Filter string : String to filter courses (if empty then fetch all courses)
-Output: Fetched courses Type: promise
-*/
+/**
+ *
+ * @param {Array} courses - An array of courses Objects
+ * @param {String} filterString - A string to filter the courses according their title (if empty then fetch all courses)
+ * @returns {String} - A string that contains tha HTML for all courses
+ */
 const showCourses = (courses, filterString) => {
   let coursesDiv = "";
   courses.forEach((course) => {
@@ -56,31 +53,25 @@ const showCourses = (courses, filterString) => {
   return coursesDiv;
 };
 
-// Variable used to store the fetched courses
+/**
+ * @type {Array} - Carry all filtered fetched courses
+ */
 let courses;
 
-/*
-Description:
-    Fetch and show courses on load
-Input   : None
-Output  : None
-*/
+/**
+ * Fetch and show courses on load
+ */
 window.onload = async () => {
   courses = await fetchCourses();
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(courses, "");
 };
 
-/*
-Description:
-    An key up handler for search input that takes the current value and search for it
-Input   : None
-Output  : None
-*/
-
+/**
+ * An on click handler for search input that takes the current value from search input and search for it
+ */
 document.querySelector("#submit-search").addEventListener("click", (event) => {
   event.preventDefault();
-  console.log("clicked");
   const filterString = document.querySelector("#search-input");
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(
