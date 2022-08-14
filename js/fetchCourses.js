@@ -67,24 +67,27 @@ const buildCourse = (course) => {
  * @returns {String} - A string that contains tha HTML for all courses
  */
 const showCourses = (courses, filterString) => {
+  // holds the result html for all courses
   let coursesDiv = "";
+
+  // Filter courses according to the search string
+  courses = courses.filter(
+    (course) => course.title.toUpperCase().indexOf(filterString) > -1
+  );
+
+  // Group courses for each slide
   const coursesGroups = groupCourses(courses, 5);
-  console.log(coursesGroups);
+
+  // build each slide of html
   for (let i = 0; i < coursesGroups.length; i++) {
     coursesDiv += `<div class="carousel-item ${i === 0 ? "active" : ""}">`;
     coursesDiv += `<div class="courses" id="courses">`;
     coursesGroups[i].forEach((course) => {
-      if (
-        filterString === "" ||
-        course.title.toUpperCase().indexOf(filterString) > -1
-      ) {
-        coursesDiv += buildCourse(course);
-      }
+      coursesDiv += buildCourse(course);
     });
     coursesDiv += `</div>`;
     coursesDiv += `</div>`;
   }
-  console.log(coursesDiv);
 
   return coursesDiv;
 };
