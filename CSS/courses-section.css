@@ -103,6 +103,18 @@
   font-weight: bold;
   padding: 6px;
 }
+
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+  border: 1px solid #6a6f73;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 8%), 0 4px 12px rgb(0 0 0 / 8%);
+  background-color: #1c1d1f;
+  height: 3em;
+  width: 3em;
+  border-radius: 100%;
+  margin: auto;
+}
+
 .course-item:hover {
   color: black;
   cursor: pointer;
