@@ -1,0 +1,11 @@
+.category-card {
+  overflow: hidden;
+}
+
+.category-img {
+  transition: 0.1s linear;
+}
+
+.category-img:hover {
+  transform: scale(1.1);
+}
