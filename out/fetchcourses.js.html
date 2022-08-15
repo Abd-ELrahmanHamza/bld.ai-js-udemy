@@ -29,12 +29,69 @@
             <pre class="prettyprint source linenums"><code>/**
  * This function fetches all courses from JSON server
  *
+ * @param {String} courseName - The courses with this topic name
  * @returns {Promise} - A promise that contains all fetched courses from JSON Server
  */
-const fetchCourses = async () => {
-  const response = await fetch("http://localhost:8000/courses");
+const fetchCourses = async (courseName) => {
+  console.log(courseName.replace(" ", ""));
+  const response = await fetch(
+    `http://localhost:8000/${courseName.replace(" ", "")}`
+  );
   const courses = await response.json();
   return courses;
+};
+
+/**
+ *
+ * @param {Array} data - Array contains all courses
+ * @param {Integer} n - The size of group
+ * @returns {2D Array} - Array contains a group of courses represented by arrays
+ */
+function groupCourses(data, n) {
+  var group = [];
+  for (var i = 0, j = 0; i &lt; data.length; i++) {
+    if (i >= n &amp;&amp; i % n === 0) j++;
+    group[j] = group[j] || [];
+    group[j].push(data[i]);
+  }
+  return group;
+}
+
+/**
+ * A function that builds the HTML string of the course
+ *
+ * @param {Object} course - An Object that contains a single course information
+ * @returns {String} - A string of HTML representation of a course
+ */
+const buildCourse = (course) => {
+  const courseHTMLStr = `
+          &lt;div class="course">
+              &lt;img src="${course.image}" alt="${course.alt}" height="135">
+              &lt;a href="${course.image}">
+                  &lt;h4 class="course-title">${course.title}&lt;/h3>
+              &lt;/a>
+              &lt;p class="course-instructor">${course.author}&lt;/p>
+              &lt;div class="stars">
+                  &lt;i class="course-rate">${
+                    Math.round(course.rating * 10) / 10
+                  }&lt;/i>
+                  &lt;i class="fa fa-star checked">&lt;/i>
+                  &lt;i class="fa fa-star checked">&lt;/i>
+                  &lt;i class="fa fa-star checked">&lt;/i>
+                  &lt;i class="fa fa-star checked">&lt;/i>
+                  &lt;i class="fa-solid fa-star-half-stroke">&lt;/i>
+                  &lt;p class="course-students">(${course.people})&lt;/p>
+              &lt;/div>
+              &lt;h4 class="course-price">E&amp;#163;${course.price}&lt;/h4>
+              &lt;p class="course-discount">E&amp;#163;${course.discount}&lt;/p>
+              ${
+                course.bestseller === "true"
+                  ? '&lt;span class="best-seller">Bestseller&lt;/span>'
+                  : ""
+              }
+          &lt;/div>
+        `;
+  return courseHTMLStr;
 };
 
 /**
@@ -44,40 +101,28 @@ const fetchCourses = async () => {
  * @returns {String} - A string that contains tha HTML for all courses
  */
 const showCourses = (courses, filterString) => {
+  // holds the result html for all courses
   let coursesDiv = "";
-  courses.forEach((course) => {
-    if (
-      filterString === "" ||
-      course.title.toUpperCase().indexOf(filterString) > -1
-    ) {
-      const courseHTMLStr = `
-        &lt;div class="course">
-            &lt;img src="${course.image}" alt="${course.alt}" height="135">
-            &lt;a href="${course.image}">
-                &lt;h4 class="course-title">${course.title}&lt;/h3>
-            &lt;/a>
-            &lt;p class="course-instructor">>${course.author}&lt;/p>
-            &lt;div class="stars">
-                &lt;i class="course-rate">${course.rating}&lt;/i>
-                &lt;i class="fa fa-star checked">&lt;/i>
-                &lt;i class="fa fa-star checked">&lt;/i>
-                &lt;i class="fa fa-star checked">&lt;/i>
-                &lt;i class="fa fa-star checked">&lt;/i>
-                &lt;i class="fa-solid fa-star-half-stroke">&lt;/i>
-                &lt;p class="course-students">(${course.people})&lt;/p>
-            &lt;/div>
-            &lt;h4 class="course-price">E&amp;#163;${course.price}&lt;/h4>
-            &lt;p class="course-discount">E&amp;#163;${course.discount}&lt;/p>
-            ${
-              course.bestseller === "true"
-                ? '&lt;span class="best-seller">Bestseller&lt;/span>'
-                : ""
-            }
-        &lt;/div>
-        `;
-      coursesDiv += courseHTMLStr;
-    }
-  });
+
+  // Filter courses according to the search string
+  courses = courses.filter(
+    (course) => course.title.toUpperCase().indexOf(filterString) > -1
+  );
+
+  // Group courses for each slide
+  const coursesGroups = groupCourses(courses, 5);
+
+  // build each slide of html
+  for (let i = 0; i &lt; coursesGroups.length; i++) {
+    coursesDiv += `&lt;div class="carousel-item ${i === 0 ? "active" : ""}">`;
+    coursesDiv += `&lt;div class="courses" id="courses">`;
+    coursesGroups[i].forEach((course) => {
+      coursesDiv += buildCourse(course);
+    });
+    coursesDiv += `&lt;/div>`;
+    coursesDiv += `&lt;/div>`;
+  }
+
   return coursesDiv;
 };
 
@@ -90,7 +135,8 @@ let courses;
  * Fetch and show courses on load
  */
 window.onload = async () => {
-  courses = await fetchCourses();
+  const courseName = document.querySelector(".course-item.active").textContent;
+  courses = await fetchCourses(courseName);
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(courses, "");
 };
@@ -100,7 +146,6 @@ window.onload = async () => {
  */
 document.querySelector("#submit-search").addEventListener("click", (event) => {
   event.preventDefault();
-  console.log("clicked");
   const filterString = document.querySelector("#search-input");
   const courseSection = document.querySelector("#courses");
   courseSection.innerHTML = showCourses(
@@ -108,6 +153,26 @@ document.querySelector("#submit-search").addEventListener("click", (event) => {
     filterString.value.toUpperCase()
   );
 });
+
+// Add an event listener to each one of courses list
+const coursesNames = document.querySelectorAll(".course-item");
+for (let i = 0; i &lt; coursesNames.length; i++) {
+  coursesNames[i].addEventListener("click", async (event) => {
+    event.preventDefault();
+
+    // Get topic name to fetch it's courses from database
+    const newCourseName = coursesNames[i].textContent;
+    courses = await fetchCourses(newCourseName);
+    const courseSection = document.querySelector("#courses");
+    courseSection.innerHTML = showCourses(courses, "");
+
+    // Add active class to selected topic and remove it from other topics
+    coursesNames[i].classList.add("active");
+    for (let j = 0; j &lt; coursesNames.length; j++) {
+      if (j !== i) coursesNames[j].classList.remove("active");
+    }
+  });
+}
 </code></pre>
         </article>
     </section>
@@ -118,13 +183,13 @@ document.querySelector("#submit-search").addEventListener("click", (event) => {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#courses">courses</a></li><li><a href="global.html#fetchCourses">fetchCourses</a></li><li><a href="global.html#showCourses">showCourses</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#buildCourse">buildCourse</a></li><li><a href="global.html#courses">courses</a></li><li><a href="global.html#fetchCourses">fetchCourses</a></li><li><a href="global.html#groupCourses">groupCourses</a></li><li><a href="global.html#showCourses">showCourses</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Sun Aug 14 2022 02:45:25 GMT+0200 (Eastern European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Mon Aug 15 2022 17:36:30 GMT+0200 (Eastern European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
